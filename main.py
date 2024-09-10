@@ -61,3 +61,21 @@ grid_search.fit(X_train, y_train)
 print(f'Best parameters: {grid_search.best_params_}')
 print(f'Best cross-validation score: {grid_search.best_score_}')
 
+from sklearn.model_selection import RandomizedSearchCV
+from scipy.stats import randint
+
+# Define the distribution for parameters
+param_dist = {
+    'max_depth': randint(3, 8),
+    'learning_rate': [0.01, 0.05, 0.1, 0.2],
+    'n_estimators': randint(100, 300),
+}
+
+# Initialize the RandomizedSearchCV object
+random_search = RandomizedSearchCV(xgb_clf, param_distributions=param_dist, n_iter=50, cv=3, scoring='accuracy')
+random_search.fit(X_train, y_train)
+
+# Best parameters and best score
+print(f'Best parameters: {random_search.best_params_}')
+print(f'Best cross-validation score: {random_search.best_score_}')
+
