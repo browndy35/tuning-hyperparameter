@@ -36,3 +36,14 @@ def predict(input_data: InputData):
     # Return the binary prediction (0 or 1)
     return {"id": input_data.id, "prediction": int(prediction[0])}
 
+import uvicorn
+import nest_asyncio
+from pyngrok import ngrok
+
+# Apply the nest_asyncio patch
+nest_asyncio.apply()
+
+public_url = ngrok.connect(9001, "http")
+print('Public URL:', public_url)
+
+uvicorn.run(app, host='0.0.0.0', port=9001)
