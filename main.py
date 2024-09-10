@@ -34,3 +34,30 @@ predictions = lin_reg.predict(X_test)
 mse = mean_squared_error(y_test, predictions)
 print(f'Mean Squared Error: {mse}')
 
+import xgboost as xgb
+
+# Initialize and fit the XGBoost classifier
+xgb_clf = xgb.XGBClassifier(eval_metric='mlogloss')
+xgb_clf.fit(X_train, y_train)
+
+# Predict and evaluate
+accuracy = xgb_clf.score(X_test, y_test)
+print(f'Accuracy: {accuracy}')
+
+from sklearn.model_selection import GridSearchCV
+
+# Define the parameter grid
+param_grid = {
+    'max_depth': [3, 5, 7],
+    'learning_rate': [0.01, 0.1, 0.2],
+    'n_estimators': [100, 200, 300],
+}
+
+# Initialize the GridSearchCV object
+grid_search = GridSearchCV(xgb_clf, param_grid, cv=3, scoring='accuracy')
+grid_search.fit(X_train, y_train)
+
+# Best parameters and best score
+print(f'Best parameters: {grid_search.best_params_}')
+print(f'Best cross-validation score: {grid_search.best_score_}')
+
